@@ -1,8 +1,7 @@
 import { GoogleGenAI, Type, Schema } from "@google/genai";
 import { Course } from "../types";
 
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-
+// Schema definition moved outside to avoid recreation
 const courseSchema: Schema = {
   type: Type.OBJECT,
   properties: {
@@ -50,8 +49,18 @@ const courseSchema: Schema = {
   required: ["title", "subtitle", "instructorName", "modules", "description", "price"]
 };
 
+// Helper function to lazy load the AI client
+const getAIClient = () => {
+  const apiKey = process.env.API_KEY;
+  if (!apiKey) {
+    throw new Error("API Key não configurada. Verifique as variáveis de ambiente no Vercel.");
+  }
+  return new GoogleGenAI({ apiKey });
+};
+
 export const generateCourseContent = async (topic: string): Promise<Course> => {
   try {
+    const ai = getAIClient();
     const response = await ai.models.generateContent({
       model: "gemini-2.5-flash",
       contents: `Gere um curso online SATÍRICO e de "ZOEIRA" sobre o tema: "${topic}". 
@@ -77,6 +86,7 @@ export const generateCourseContent = async (topic: string): Promise<Course> => {
 
 export const generateLessonContent = async (courseTitle: string, moduleTitle: string, lessonTitle: string): Promise<string> => {
   try {
+    const ai = getAIClient();
     const response = await ai.models.generateContent({
       model: "gemini-2.5-flash",
       contents: `Contexto: Você é o instrutor de um curso online de comédia/sátira chamado "${courseTitle}".
@@ -98,6 +108,6 @@ export const generateLessonContent = async (courseTitle: string, moduleTitle: st
     return response.text || "Ocorreu um erro ao baixar este conhecimento proibido. O universo talvez não esteja pronto.";
   } catch (error) {
     console.error("Erro ao gerar aula:", error);
-    return "O professor foi abduzido por alienígenas antes de escrever esta aula. Tente novamente.";
+    return "O professor foi abduzido por alienígenas antes de escrever esta aula (ou a API Key falhou). Tente novamente.";
   }
 };

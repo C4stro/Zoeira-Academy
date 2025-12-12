@@ -6,9 +6,9 @@ export default defineConfig(({ mode }) => {
   return {
     plugins: [react()],
     define: {
-      // Isso permite que o código continue usando process.env.API_KEY
-      // mesmo rodando no navegador após o build.
-      'process.env.API_KEY': JSON.stringify(env.API_KEY)
+      'process.env.API_KEY': JSON.stringify(env.API_KEY),
+      // Adiciona um objeto vazio para process.env para evitar crash se alguma lib tentar acessar apenas process.env
+      'process.env': {}
     }
   };
 });
