@@ -3,7 +3,7 @@ import { generateCourseContent, generateAbsurdQuote } from './services/geminiSer
 import { Course } from './types';
 import { CourseCard } from './components/CourseCard';
 import { Button } from './components/Button';
-import { Sparkles, BrainCircuit, Dices, Loader2, Zap, Coffee, Copy, Check, Heart, History, RotateCcw, Trash2, GraduationCap, ArrowRight, Share2, Quote, Camera } from 'lucide-react';
+import { Sparkles, BrainCircuit, Dices, Loader2, Zap, Coffee, Copy, Check, Heart, History, RotateCcw, Trash2, GraduationCap, ArrowRight, Share2, Quote, Camera, MessageCircle, Twitter, Link as LinkIcon } from 'lucide-react';
 
 const ABSURD_TOPICS = [
   // Clássicos
@@ -78,6 +78,7 @@ function App() {
   // Quote Generator State
   const [impactQuote, setImpactQuote] = useState<string | null>(null);
   const [quoteLoading, setQuoteLoading] = useState(false);
+  const [quoteCopied, setQuoteCopied] = useState(false);
   
   const spinInterval = useRef<number | null>(null);
 
@@ -159,25 +160,32 @@ function App() {
     setQuoteLoading(false);
   };
 
-  const shareQuote = async () => {
+  // --- FUNÇÕES DE COMPARTILHAMENTO ---
+  const getShareText = () => {
+    if (!impactQuote) return '';
+    return `"${impactQuote}"\n\nSabedoria da Zoeira Academy 🎓\nGere o seu aqui: ${window.location.href}`;
+  };
+
+  const shareToWhatsApp = () => {
     if (!impactQuote) return;
-    
-    const textToShare = `"${impactQuote}" - Sabedoria da Zoeira Academy`;
-    
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: 'Zoeira Academy - Sabedoria',
-          text: textToShare,
-          url: window.location.href
-        });
-      } catch (err) {
-        console.log("Erro ao compartilhar", err);
-      }
-    } else {
-      navigator.clipboard.writeText(textToShare);
-      alert("Frase copiada! Cole no zap.");
-    }
+    const text = getShareText();
+    const url = `https://wa.me/?text=${encodeURIComponent(text)}`;
+    window.open(url, '_blank');
+  };
+
+  const shareToTwitter = () => {
+    if (!impactQuote) return;
+    const text = `"${impactQuote}" - Sabedoria da Zoeira Academy 🎓`;
+    const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(window.location.href)}`;
+    window.open(url, '_blank');
+  };
+
+  const copyToClipboard = () => {
+    if (!impactQuote) return;
+    const text = getShareText();
+    navigator.clipboard.writeText(text);
+    setQuoteCopied(true);
+    setTimeout(() => setQuoteCopied(false), 2000);
   };
 
   const loadFromHistory = (historyCourse: Course) => {
@@ -370,23 +378,48 @@ function App() {
                     </div>
                     
                     {/* Controls */}
-                    <div className="bg-white p-3 flex gap-2">
+                    <div className="bg-white p-3 flex flex-col gap-3">
                          <Button 
                             onClick={generateNewQuote} 
                             disabled={quoteLoading}
-                            className="flex-1 bg-slate-900 hover:bg-slate-800 text-white text-sm py-3"
+                            className="w-full bg-slate-900 hover:bg-slate-800 text-white text-sm py-3"
                          >
                             <Camera className="w-4 h-4 mr-2" />
-                            {impactQuote ? "Gerar Outra" : "Gerar Frase"}
+                            {impactQuote ? "Gerar Outra Frase" : "Gerar Frase"}
                          </Button>
-                         <Button 
-                            onClick={shareQuote}
-                            disabled={!impactQuote}
-                            variant="secondary"
-                            className="w-14 flex items-center justify-center px-0 bg-slate-100 hover:bg-slate-200 text-slate-900 border-none"
-                         >
-                            <Share2 className="w-5 h-5" />
-                         </Button>
+
+                         {/* Sharing Bar */}
+                         <div className="flex gap-2">
+                           <button 
+                             onClick={shareToWhatsApp}
+                             disabled={!impactQuote}
+                             className="flex-1 flex items-center justify-center py-2 bg-[#25D366] hover:bg-[#20b858] text-white rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                             title="Compartilhar no WhatsApp"
+                           >
+                             <MessageCircle className="w-5 h-5" />
+                           </button>
+                           
+                           <button 
+                             onClick={shareToTwitter}
+                             disabled={!impactQuote}
+                             className="flex-1 flex items-center justify-center py-2 bg-black hover:bg-slate-800 text-white rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                             title="Compartilhar no X (Twitter)"
+                           >
+                             <Twitter className="w-5 h-5" />
+                           </button>
+
+                           <button 
+                             onClick={copyToClipboard}
+                             disabled={!impactQuote}
+                             className="flex-1 flex items-center justify-center py-2 bg-slate-200 hover:bg-slate-300 text-slate-900 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed relative"
+                             title="Copiar Link e Texto (Para Instagram)"
+                           >
+                             {quoteCopied ? <Check className="w-5 h-5 text-green-600" /> : <LinkIcon className="w-5 h-5" />}
+                           </button>
+                         </div>
+                         <p className="text-[10px] text-center text-slate-400">
+                           Para Instagram: Copie o link e cole no Story.
+                         </p>
                     </div>
                 </div>
             </div>
