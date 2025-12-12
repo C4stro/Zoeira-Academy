@@ -6,21 +6,61 @@ import { Button } from './components/Button';
 import { Sparkles, BrainCircuit, Dices, Loader2, Zap, Coffee, Copy, Check, Heart } from 'lucide-react';
 
 const ABSURD_TOPICS = [
+  // Clássicos
   "Como convencer seu gato a pagar metade do aluguel",
   "Mestrado em Fofoca de Bairro e Investigação Digital",
   "Técnicas avançadas para dobrar lençol de elástico com a força da mente",
   "Como ficar milionário vendendo ar engarrafado gourmet",
   "Doutorado em responder 'Vou ver e te aviso' sem culpa",
   "Sobrevivência em Grupo de Família do WhatsApp: Módulo Avançado",
-  "Como pilotar nave alienígena sem carteira de motorista",
-  "Coach Quântico de Vegetais: Como motivar sua salada",
-  "Estratégias para parecer ocupado no trabalho enquanto dorme de olhos abertos",
+  
+  // Coach & Mindset
+  "Mindset de Tubarão em Aquário de Peixe Beta: Pense Pequeno",
+  "Desbloqueio Mental para aceitar que a culpa é do Signo",
+  "Como vibrar na frequência da Riqueza Quântica devendo no Serasa",
+  "Reprogramação de DNA para nascer herdeiro na próxima vida",
+  "Coach de Fracasso: Como desistir antes mesmo de tentar",
+  "Como transformar sua preguiça em 'Lifestyle Slow Living'",
+  "A Arte de parecer ocupado no trabalho alternando Abas do Excel",
+  "Hipnose para convencer o chefe de que você merece aumento (sem trabalhar)",
+  "Como ser um Macho Alfa sendo sustentado pela Avó",
+  "O Segredo: Como atrair dinheiro pensando forte (enquanto dorme)",
+
+  // Marketing Digital & Business
+  "Como vender Curso de como vender Curso de como vender Curso",
+  "Dropshipping de Gelo para Esquimós: O Oceano Azul",
+  "Day Trade de Figurinhas da Copa de 2014",
+  "NFT de Boleto Pago: A nova arte digital",
+  "Marketing Digital para Pombos: O nicho inexplorado",
   "Como criar um esquema de pirâmide baseado em abraços virtuais",
+  "Linkedin Top Voice: Como escrever textão sobre demitir a própria mãe",
+  "Como convencer o Agiota a investir no seu Mindset",
+  "Gestão de Crise: O que fazer quando a mãe conta até três",
+
+  // Life Hacks Bizarros
+  "Workshop de Fotossíntese Humana: Vivendo de Luz e Boletos",
+  "Dieta da Ansiedade: Perca peso roendo as unhas",
+  "Como pilotar nave alienígena sem carteira de motorista",
+  "Feng Shui de Gaveta de Cabos Embolados",
+  "Interpretação de sonhos de Eletrodomésticos (A Geladeira fala?)",
+  "Técnicas de Invisibilidade para evitar vizinhos no elevador",
+  "Como ganhar discussões imaginárias no chuveiro (Nível Hard)",
   "Culinária Molecular para fazer Miojo Gourmet de R$ 300,00",
-  "Como treinar sua avó para ser uma pro-player de CS:GO",
-  "Feng Shui para organizar a área de trabalho do Windows",
-  "Interpretação de sonhos de eletrodomésticos",
-  "Como ganhar discussões imaginárias no chuveiro (Nível Hard)"
+  "Sommelier de Água da Torneira: Identifique o terroir do cano",
+  "Como treinar sua barata para buscar o controle remoto",
+  "Telepatia para chamar o garçom quando ele te ignora",
+  "Como ler livros por osmose (dormindo em cima deles)",
+  "Meditação Transcendental para aguentar áudio de 5 minutos",
+  "Yoga Facial para parecer interessado em reuniões chatas",
+  
+  // Tecnologia & Paranormal
+  "Como hackear o universo usando HTML básico",
+  "Consultoria Amorosa com ChatGPT: Como ser romântico com IA",
+  "Como minerar Bitcoin usando calculadora de padaria",
+  "Exorcismo de Impressora: Fazendo ela funcionar sem ódio",
+  "Terapia de Vidas Passadas para saber quem comeu seu iogurte",
+  "Como fugir de parentes usando Realidade Aumentada",
+  "Análise Técnica de Jogo do Bicho e Rinha de Galo Virtual"
 ];
 
 const PIX_CODE = "00020126860014BR.GOV.BCB.PIX013634b749d6-b362-40d0-8247-b2b4ec8c6d3e0224me ajude a pagar um café5204000053039865802BR5923Matheus Henrique Castro6009SAO PAULO62140510XHGFH3iwc363046E0E";
