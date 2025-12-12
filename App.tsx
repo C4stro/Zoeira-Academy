@@ -3,7 +3,7 @@ import { generateCourseContent, generateAbsurdQuote } from './services/geminiSer
 import { Course } from './types';
 import { CourseCard } from './components/CourseCard';
 import { Button } from './components/Button';
-import { Sparkles, BrainCircuit, Dices, Loader2, Zap, Coffee, Copy, Check, Heart, History, RotateCcw, Trash2, GraduationCap, ArrowRight, Share2, Quote, Camera, MessageCircle, Twitter, Link as LinkIcon } from 'lucide-react';
+import { Sparkles, BrainCircuit, Dices, Loader2, Zap, Coffee, Copy, Check, Heart, History, RotateCcw, Trash2, GraduationCap, ArrowRight, Share2, Quote, Camera, MessageCircle, Twitter, Link as LinkIcon, ArrowDown } from 'lucide-react';
 
 const ABSURD_TOPICS = [
   // Clássicos
@@ -205,8 +205,8 @@ function App() {
     setTimeout(() => setPixCopied(false), 2000);
   };
 
-  const scrollToDonation = () => {
-    document.getElementById('donation-section')?.scrollIntoView({ behavior: 'smooth' });
+  const scrollToSection = (id: string) => {
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
   };
 
   return (
@@ -234,7 +234,14 @@ function App() {
           </div>
           <div className="flex items-center gap-3">
              <button 
-                onClick={scrollToDonation}
+                onClick={() => scrollToSection('quotes-tool')}
+                className="hidden sm:flex items-center gap-2 text-xs font-bold text-slate-400 hover:text-white transition-colors"
+             >
+                <Quote className="w-3 h-3" />
+                Frases
+             </button>
+             <button 
+                onClick={() => scrollToSection('donation-section')}
                 className="hidden md:flex items-center gap-2 text-xs font-bold text-slate-300 hover:text-white bg-white/5 hover:bg-white/10 px-4 py-2 rounded-full border border-white/10 transition-all group"
              >
                 <Heart className="w-3 h-3 text-pink-500 group-hover:scale-125 transition-transform" />
@@ -259,7 +266,7 @@ function App() {
                   
                   {/* Botão Pix Solicitado */}
                   <button 
-                    onClick={scrollToDonation}
+                    onClick={() => scrollToSection('donation-section')}
                     className="inline-flex items-center px-4 py-2 rounded-full bg-gradient-to-r from-green-900/40 to-emerald-900/40 border border-emerald-500/30 text-emerald-300 text-xs font-bold uppercase tracking-widest hover:bg-emerald-900/60 transition-colors cursor-pointer group"
                     title="Isso vai financiar outras ideias reais e importantes"
                   >
@@ -282,10 +289,37 @@ function App() {
                   Cansado de cursos reais que exigem esforço? 
                   <strong className="text-slate-200 font-semibold block mt-1">Deixe o algoritmo decidir sua próxima carreira fracassada.</strong>
               </p>
+
+              {/* QUICK NAV: Choose your poison */}
+              <div className="grid grid-cols-2 gap-4 w-full max-w-md mt-4">
+                  <button 
+                    onClick={() => scrollToSection('roulette-tool')}
+                    className="flex flex-col items-center p-4 rounded-xl bg-slate-800/50 border border-white/10 hover:bg-slate-800 hover:border-pink-500/50 transition-all group active:scale-95"
+                  >
+                     <div className="p-3 bg-pink-500/10 rounded-full mb-2 group-hover:scale-110 transition-transform">
+                        <Dices className="w-6 h-6 text-pink-400" />
+                     </div>
+                     <span className="font-bold text-sm text-white">Gerar Curso</span>
+                     <span className="text-[10px] text-slate-500">Sua nova carreira</span>
+                  </button>
+
+                  <button 
+                    onClick={() => scrollToSection('quotes-tool')}
+                    className="flex flex-col items-center p-4 rounded-xl bg-slate-800/50 border border-white/10 hover:bg-slate-800 hover:border-yellow-500/50 transition-all group active:scale-95 relative overflow-hidden"
+                  >
+                     <div className="absolute top-0 right-0 px-2 py-0.5 bg-yellow-500 text-[9px] font-bold text-black rounded-bl-lg">NOVO</div>
+                     <div className="p-3 bg-yellow-500/10 rounded-full mb-2 group-hover:scale-110 transition-transform">
+                        <Quote className="w-6 h-6 text-yellow-400" />
+                     </div>
+                     <span className="font-bold text-sm text-white">Gerar Frase</span>
+                     <span className="text-[10px] text-slate-500">Coach Quântico</span>
+                  </button>
+              </div>
+
             </div>
 
             {/* The "Roulette" Interface */}
-            <div className="w-full max-w-2xl relative group">
+            <div id="roulette-tool" className="w-full max-w-2xl relative group scroll-mt-24">
                 {/* Glow behind the card */}
                 <div className="absolute -inset-1 bg-gradient-to-r from-pink-500 via-violet-500 to-pink-500 rounded-[2rem] opacity-30 group-hover:opacity-50 blur-xl transition duration-500 animate-gradient-x"></div>
                 
@@ -335,8 +369,14 @@ function App() {
               </div>
             )}
 
+            {/* Visual Separation / Arrow Down */}
+            <div className="flex flex-col items-center justify-center space-y-2 opacity-50 animate-bounce">
+                <span className="text-[10px] uppercase tracking-widest">Tem mais lixo digital abaixo</span>
+                <ArrowDown className="w-4 h-4" />
+            </div>
+
             {/* IMPACT QUOTE GENERATOR SECTION */}
-            <div className="w-full max-w-3xl mt-12 pt-12 border-t border-white/5">
+            <div id="quotes-tool" className="w-full max-w-3xl mt-12 pt-12 border-t border-white/5 scroll-mt-24">
                 <div className="text-center mb-8">
                     <h2 className="text-2xl md:text-3xl font-black text-white flex items-center justify-center gap-2 mb-2">
                         <Quote className="w-6 h-6 text-yellow-400 fill-yellow-400" />
