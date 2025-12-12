@@ -3,7 +3,7 @@ import { generateCourseContent } from './services/geminiService';
 import { Course } from './types';
 import { CourseCard } from './components/CourseCard';
 import { Button } from './components/Button';
-import { Sparkles, BrainCircuit, Dices, Loader2, Zap, Coffee, Copy, Check } from 'lucide-react';
+import { Sparkles, BrainCircuit, Dices, Loader2, Zap, Coffee, Copy, Check, Heart } from 'lucide-react';
 
 const ABSURD_TOPICS = [
   "Como convencer seu gato a pagar metade do aluguel",
@@ -63,6 +63,10 @@ function App() {
     setTimeout(() => setPixCopied(false), 2000);
   };
 
+  const scrollToDonation = () => {
+    document.getElementById('donation-section')?.scrollIntoView({ behavior: 'smooth' });
+  };
+
   return (
     <div className="min-h-screen bg-slate-900 text-slate-100 selection:bg-pink-500 selection:text-white flex flex-col">
       {/* Navbar */}
@@ -76,9 +80,16 @@ function App() {
               Zoeira<span className="text-pink-500">Academy</span>
             </span>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
+             <button 
+                onClick={scrollToDonation}
+                className="hidden md:flex items-center gap-2 text-xs font-bold text-pink-400 hover:text-pink-300 bg-pink-500/10 px-3 py-1.5 rounded-full border border-pink-500/20 hover:border-pink-500/50 transition-all"
+             >
+                <Heart className="w-3 h-3 fill-pink-500" />
+                Apoie o Projeto
+             </button>
             <span className="bg-slate-800 px-2 py-1 rounded-full border border-slate-700 text-[10px] md:text-xs text-slate-400">
-              v1.0 (Beta Caótico)
+              v1.0 Beta
             </span>
           </div>
         </div>
@@ -148,59 +159,66 @@ function App() {
         )}
       </main>
 
-      {/* Donation Section */}
-      <section className="border-t border-slate-800 bg-slate-900/50 py-8 md:py-12">
-        <div className="max-w-3xl mx-auto px-4 text-center space-y-6">
-           <div className="inline-flex items-center justify-center p-3 bg-pink-500/10 rounded-full ring-1 ring-pink-500/30">
-              <Coffee className="w-6 h-6 text-pink-500" />
-           </div>
-           
-           <div className="space-y-2">
-             <h2 className="text-xl md:text-3xl font-bold text-white">Me paga um café? 🥺</h2>
-             <p className="text-sm md:text-base text-slate-400 max-w-lg mx-auto">
-               Sou pobre e esse site não paga meus boletos. Se você riu, considere doar qualquer centavo.
-             </p>
-           </div>
-
-           <div className="bg-slate-800 p-4 md:p-6 rounded-2xl border border-slate-700 shadow-xl flex flex-col md:flex-row gap-6 items-center w-full">
-              <div className="bg-white p-2 rounded-xl shadow-inner flex-shrink-0">
-                <img 
-                  src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(PIX_CODE)}`}
-                  alt="QR Code Pix"
-                  className="w-32 h-32 md:w-40 md:h-40 mix-blend-multiply"
-                />
+      {/* Donation Section Highlighted */}
+      <section id="donation-section" className="py-12 md:py-20 relative overflow-hidden">
+        {/* Glow Effects */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-pink-600/20 blur-[100px] rounded-full pointer-events-none"></div>
+        
+        <div className="max-w-4xl mx-auto px-4 relative z-10">
+           <div className="bg-slate-900/80 backdrop-blur-lg border-2 border-pink-500/50 rounded-3xl p-6 md:p-10 shadow-[0_0_50px_-12px_rgba(236,72,153,0.3)] flex flex-col md:flex-row items-center gap-8 md:gap-12 transform transition-transform hover:scale-[1.01]">
+              
+              <div className="flex-1 space-y-4 text-center md:text-left">
+                  <div className="inline-flex items-center justify-center p-3 bg-pink-500 text-white rounded-2xl shadow-lg shadow-pink-500/20 mb-2 rotate-3 transform">
+                     <Coffee className="w-8 h-8" />
+                  </div>
+                  <h2 className="text-3xl md:text-4xl font-black text-white leading-tight">
+                    Momento <span className="text-pink-500">Pidão</span> 🐮
+                  </h2>
+                  <p className="text-slate-300 text-lg leading-relaxed">
+                    Esse site roda a base de <b>café e boletos atrasados</b>. Se eu tirei um sorriso do seu rosto (ou te fiz questionar minha sanidade), fortalece aí com um cafezinho!
+                  </p>
+                  <p className="text-sm text-pink-400 font-bold uppercase tracking-widest flex items-center justify-center md:justify-start gap-2">
+                    <Heart className="w-4 h-4 animate-pulse" />
+                    Ajude um Dev Cansado
+                  </p>
               </div>
 
-              <div className="flex flex-col gap-3 text-left w-full overflow-hidden">
-                 <div className="w-full">
-                    <span className="text-[10px] md:text-xs uppercase tracking-wider text-slate-500 font-bold">Chave Pix (Copia e Cola)</span>
-                    <div className="relative mt-1">
-                      <div className="bg-slate-900 border border-slate-700 rounded-lg p-3 text-[10px] md:text-xs text-slate-400 font-mono break-all whitespace-normal h-auto max-h-24 overflow-y-auto custom-scrollbar select-all">
-                          {PIX_CODE}
-                      </div>
-                    </div>
-                 </div>
-                 
-                 <button 
-                   onClick={copyPix}
-                   className={`w-full py-3 px-4 rounded-lg font-bold text-sm transition-all flex items-center justify-center gap-2 active:scale-95 ${
-                     pixCopied 
-                     ? 'bg-green-500 text-white shadow-green-500/25 shadow-lg' 
-                     : 'bg-violet-600 hover:bg-violet-700 text-white shadow-violet-500/25 shadow-lg'
-                   }`}
-                 >
-                   {pixCopied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-                   {pixCopied ? "Copiado!" : "Copiar Código Pix"}
-                 </button>
+              <div className="flex-shrink-0 bg-white p-4 rounded-2xl shadow-2xl rotate-1 transform border-4 border-slate-800 w-full max-w-xs md:w-auto">
+                 <img 
+                    src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(PIX_CODE)}`}
+                    alt="QR Code Pix"
+                    className="w-full aspect-square md:w-48 md:h-48 mix-blend-multiply mb-4 mx-auto"
+                  />
+                  
+                  <div className="space-y-3">
+                     <div className="bg-slate-100 rounded-lg p-2 text-[10px] text-slate-500 font-mono text-center break-all h-12 overflow-hidden relative">
+                        <div className="absolute inset-x-0 bottom-0 h-4 bg-gradient-to-t from-slate-100 to-transparent"></div>
+                        {PIX_CODE}
+                     </div>
+                     <button 
+                      onClick={copyPix}
+                      className={`w-full py-3 px-4 rounded-xl font-black text-sm uppercase tracking-wide transition-all shadow-lg flex items-center justify-center gap-2 active:scale-95 ${
+                        pixCopied 
+                        ? 'bg-green-500 text-white shadow-green-500/30' 
+                        : 'bg-pink-600 hover:bg-pink-700 text-white shadow-pink-500/30'
+                      }`}
+                    >
+                      {pixCopied ? <Check className="w-5 h-5" /> : <Copy className="w-5 h-5" />}
+                      {pixCopied ? "Copiado!" : "Copiar Chave Pix"}
+                    </button>
+                  </div>
               </div>
+
            </div>
         </div>
       </section>
 
-      <footer className="border-t border-slate-800 bg-slate-950 py-6">
-        <div className="max-w-7xl mx-auto px-4 text-center text-slate-500 text-xs md:text-sm">
-          <p>© {new Date().getFullYear()} Zoeira Academy.</p>
-          <p className="mt-1 opacity-50">Não leve a sério.</p>
+      <footer className="border-t border-slate-800 bg-slate-950 py-8">
+        <div className="max-w-7xl mx-auto px-4 text-center text-slate-500 text-sm">
+          <p className="mb-2">© {new Date().getFullYear()} Zoeira Academy. Feito com ❤️ e ☕.</p>
+          <p className="text-xs opacity-50 max-w-md mx-auto">
+            Atenção: Nenhum conteúdo gerado aqui deve ser levado a sério. Não use estas dicas para operar máquinas pesadas ou tomar decisões de vida.
+          </p>
         </div>
       </footer>
     </div>
