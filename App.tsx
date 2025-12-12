@@ -63,7 +63,7 @@ const ABSURD_TOPICS = [
   "Análise Técnica de Jogo do Bicho e Rinha de Galo Virtual"
 ];
 
-const PIX_CODE = "00020126860014BR.GOV.BCB.PIX013634b749d6-b362-40d0-8247-b2b4ec8c6d3e0224me ajude a pagar um café5204000053039865802BR5923Matheus Henrique Castro6009SAO PAULO62140510XHGFH3iwc363046E0E";
+const PIX_CODE = "34b749d6-b362-40d0-8247-b2b4ec8c6d3e";
 const STORAGE_KEY = 'zoeira_academy_history_v1';
 
 function App() {
