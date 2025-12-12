@@ -109,3 +109,26 @@ export const generateLessonContent = async (courseTitle: string, moduleTitle: st
     return "Erro de conexão com o além (API Error).";
   }
 };
+
+export const generateAbsurdQuote = async (): Promise<string> => {
+  try {
+    const ai = getAIClient();
+    const response = await ai.models.generateContent({
+      model: "gemini-2.5-flash",
+      contents: `Gere uma única frase motivacional curta (max 140 chars) extremamente absurda, satírica e "coach quântico". 
+      Exemplos: 
+      "Não sabendo que era impossível, foi lá e soube."
+      "O sucesso é apenas um fracasso que deu errado."
+      "Vibre na frequência do boleto pago."
+      "Seja o CEO da sua própria derrota."
+      
+      Retorne APENAS o texto da frase, sem aspas.`,
+      config: {
+        temperature: 1.4,
+      }
+    });
+    return response.text || "O universo está reiniciando o modem.";
+  } catch (error) {
+    return "Erro 404: Motivação não encontrada.";
+  }
+};

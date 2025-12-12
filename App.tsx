@@ -1,9 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
-import { generateCourseContent } from './services/geminiService';
+import { generateCourseContent, generateAbsurdQuote } from './services/geminiService';
 import { Course } from './types';
 import { CourseCard } from './components/CourseCard';
 import { Button } from './components/Button';
-import { Sparkles, BrainCircuit, Dices, Loader2, Zap, Coffee, Copy, Check, Heart, History, RotateCcw, Trash2, GraduationCap, ArrowRight } from 'lucide-react';
+import { Sparkles, BrainCircuit, Dices, Loader2, Zap, Coffee, Copy, Check, Heart, History, RotateCcw, Trash2, GraduationCap, ArrowRight, Share2, Quote, Camera } from 'lucide-react';
 
 const ABSURD_TOPICS = [
   // Clássicos
@@ -74,6 +74,10 @@ function App() {
   const [error, setError] = useState('');
   const [currentTopic, setCurrentTopic] = useState('O que vamos aprender hoje?');
   const [pixCopied, setPixCopied] = useState(false);
+  
+  // Quote Generator State
+  const [impactQuote, setImpactQuote] = useState<string | null>(null);
+  const [quoteLoading, setQuoteLoading] = useState(false);
   
   const spinInterval = useRef<number | null>(null);
 
@@ -148,6 +152,34 @@ function App() {
     }
   };
 
+  const generateNewQuote = async () => {
+    setQuoteLoading(true);
+    const quote = await generateAbsurdQuote();
+    setImpactQuote(quote);
+    setQuoteLoading(false);
+  };
+
+  const shareQuote = async () => {
+    if (!impactQuote) return;
+    
+    const textToShare = `"${impactQuote}" - Sabedoria da Zoeira Academy`;
+    
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: 'Zoeira Academy - Sabedoria',
+          text: textToShare,
+          url: window.location.href
+        });
+      } catch (err) {
+        console.log("Erro ao compartilhar", err);
+      }
+    } else {
+      navigator.clipboard.writeText(textToShare);
+      alert("Frase copiada! Cole no zap.");
+    }
+  };
+
   const loadFromHistory = (historyCourse: Course) => {
     setCourse(historyCourse);
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -209,10 +241,26 @@ function App() {
           <div className="max-w-5xl w-full flex flex-col items-center space-y-16 animate-fade-in-up">
             
             {/* Hero Section */}
-            <div className="text-center space-y-6 max-w-3xl mx-auto">
-              <div className="inline-flex items-center px-4 py-2 rounded-full bg-slate-900 border border-slate-800 text-slate-400 text-xs font-bold uppercase tracking-widest shadow-xl">
-                <Sparkles className="w-3 h-3 mr-2 text-yellow-400" />
-                A Revolução da Educação Inútil
+            <div className="text-center space-y-6 max-w-3xl mx-auto flex flex-col items-center">
+              
+              <div className="flex flex-wrap items-center justify-center gap-3">
+                  <div className="inline-flex items-center px-4 py-2 rounded-full bg-slate-900 border border-slate-800 text-slate-400 text-xs font-bold uppercase tracking-widest shadow-xl">
+                    <Sparkles className="w-3 h-3 mr-2 text-yellow-400" />
+                    A Revolução da Educação Inútil
+                  </div>
+                  
+                  {/* Botão Pix Solicitado */}
+                  <button 
+                    onClick={scrollToDonation}
+                    className="inline-flex items-center px-4 py-2 rounded-full bg-gradient-to-r from-green-900/40 to-emerald-900/40 border border-emerald-500/30 text-emerald-300 text-xs font-bold uppercase tracking-widest hover:bg-emerald-900/60 transition-colors cursor-pointer group"
+                    title="Isso vai financiar outras ideias reais e importantes"
+                  >
+                     <Coffee className="w-3 h-3 mr-2" />
+                     Doe se gostou
+                     <span className="hidden sm:inline normal-case tracking-normal font-normal opacity-70 ml-2 border-l border-emerald-500/30 pl-2 text-[10px]">
+                        Financie ideias reais
+                     </span>
+                  </button>
               </div>
               
               <h1 className="text-5xl md:text-7xl font-black tracking-tighter text-white leading-[1.1]">
@@ -237,8 +285,8 @@ function App() {
                     
                     {/* Screen Area */}
                     <div className="bg-black/50 rounded-[1.5rem] border border-white/5 p-8 md:p-12 min-h-[200px] flex flex-col items-center justify-center text-center mb-2 relative overflow-hidden">
-                        {/* Scanlines effect */}
-                        <div className="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] z-0 bg-[length:100%_4px,6px_100%] pointer-events-none"></div>
+                        {/* Scanlines effect via CSS class */}
+                        <div className="scanlines"></div>
                         
                         {isSpinning ? (
                             <div className="relative z-10 flex flex-col items-center space-y-4">
@@ -278,6 +326,70 @@ function App() {
                  {error}
               </div>
             )}
+
+            {/* IMPACT QUOTE GENERATOR SECTION */}
+            <div className="w-full max-w-3xl mt-12 pt-12 border-t border-white/5">
+                <div className="text-center mb-8">
+                    <h2 className="text-2xl md:text-3xl font-black text-white flex items-center justify-center gap-2 mb-2">
+                        <Quote className="w-6 h-6 text-yellow-400 fill-yellow-400" />
+                        Momento Sabedoria Desmotivacional
+                    </h2>
+                    <p className="text-slate-400 text-sm">Frases perfeitas para seu LinkedIn (ou terapia).</p>
+                </div>
+
+                <div className="bg-white p-2 rounded-2xl shadow-2xl max-w-md mx-auto transform rotate-1 hover:rotate-0 transition-transform duration-500">
+                    <div className="bg-slate-900 rounded-xl overflow-hidden relative aspect-[4/5] flex flex-col">
+                        
+                        {/* Fake Image Background */}
+                        <div className="absolute inset-0">
+                             <img 
+                                src={`https://picsum.photos/seed/${impactQuote || 'default'}/600/800?grayscale&blur=2`}
+                                className="w-full h-full object-cover opacity-40"
+                                alt="Fundo motivacional"
+                             />
+                             <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-black/60"></div>
+                        </div>
+
+                        {/* Content */}
+                        <div className="relative z-10 flex-1 flex flex-col items-center justify-center p-8 text-center">
+                            {quoteLoading ? (
+                                <Loader2 className="w-12 h-12 text-white animate-spin" />
+                            ) : (
+                                <>
+                                    <Quote className="w-10 h-10 text-pink-500 mb-6 opacity-80" />
+                                    <p className="text-2xl md:text-3xl font-black text-white leading-tight font-serif italic drop-shadow-lg">
+                                        "{impactQuote || "Clique no botão abaixo para receber um choque de realidade alternativa."}"
+                                    </p>
+                                    <div className="w-16 h-1 bg-yellow-500 mt-6 mb-2 rounded-full"></div>
+                                    <p className="text-xs uppercase tracking-[0.2em] text-slate-300 font-bold">
+                                        Zoeira Academy
+                                    </p>
+                                </>
+                            )}
+                        </div>
+                    </div>
+                    
+                    {/* Controls */}
+                    <div className="bg-white p-3 flex gap-2">
+                         <Button 
+                            onClick={generateNewQuote} 
+                            disabled={quoteLoading}
+                            className="flex-1 bg-slate-900 hover:bg-slate-800 text-white text-sm py-3"
+                         >
+                            <Camera className="w-4 h-4 mr-2" />
+                            {impactQuote ? "Gerar Outra" : "Gerar Frase"}
+                         </Button>
+                         <Button 
+                            onClick={shareQuote}
+                            disabled={!impactQuote}
+                            variant="secondary"
+                            className="w-14 flex items-center justify-center px-0 bg-slate-100 hover:bg-slate-200 text-slate-900 border-none"
+                         >
+                            <Share2 className="w-5 h-5" />
+                         </Button>
+                    </div>
+                </div>
+            </div>
 
             {/* Dashboard / History Section */}
             {history.length > 0 && (
