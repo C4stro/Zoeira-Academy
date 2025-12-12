@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { generateCourseContent } from './services/geminiService';
 import { Course } from './types';
 import { CourseCard } from './components/CourseCard';
